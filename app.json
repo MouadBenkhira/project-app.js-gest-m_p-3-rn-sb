@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "pfa",
+    "slug": "pfa",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/7.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/1.jpeg",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/6.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": {
+      "expo-document-picker": {
+        "iCloudContainerEnvironment": "Production"
+      },
+      "expo-image-picker": {
+        "photosPermission": "The app accesses your photos to let you share them with your friends."
+      }
+    },
+    "platforms": ["ios", "android", "web"],
+    "mediaLibrary": {
+      "allowsReading": true,
+      "allowsWriting": true
+    }
+  }
+}

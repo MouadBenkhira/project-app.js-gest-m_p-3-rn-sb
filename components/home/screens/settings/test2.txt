@@ -1,0 +1,88 @@
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, TouchableOpacity, Image } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons'; // Import MaterialIcons from Expo
+import * as DocumentPicker from 'expo-document-picker';
+import { Avatar, VStack, Center, NativeBaseProvider } from "native-base";
+
+
+const AccountSettingsScreen = ({ navigation }) => {
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [gender, setGender] = useState('');
+  const [image, setImage] = useState(null);
+
+  const handleSaveChanges = () => {
+    // Handle saving changes to the backend or local storage
+    // For simplicity, we're just logging the changes for now
+    console.log('Full Name:', fullName);
+    console.log('Email:', email);
+    console.log('Password:', password);
+    console.log('Gender:', gender);
+    console.log('Image:', image);
+  };
+
+  const selectImage = async () => {
+    try {
+      const doc = await DocumentPicker.getDocumentAsync({
+        type: 'image/*', // Specify MIME type for image files
+      });
+
+      if (doc.type === 'success') {
+        setImage(doc.uri);
+      } else {
+        console.log("No image selected");
+      }
+    } catch (err) {
+      console.log("Error:", err);
+    }
+  }
+
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#131212' }}>
+       <TouchableOpacity onPress={() => navigation.goBack()}>
+          <MaterialIcons title="return" name="keyboard-arrow-left" size={24} color="blue" />
+        </TouchableOpacity>
+       <Avatar bg="purple.600" alignSelf="center" size="2xl" marginBottom={20} source={{
+        uri: "https://images.unsplash.com/photo-1510771463146-e89e6e86560e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=627&q=80"
+      }}>
+          RB
+          
+        </Avatar>
+      <Text style={{color:'white',fontSize:20, marginBottom:10,fontFamily:'Arial'}}>Account Settings</Text>
+      <TextInput
+        placeholder="Full Name"
+        value={fullName}
+        onChangeText={text => setFullName(text)}
+        style={{ borderWidth: 2, borderColor: 'gray', margin: 10, padding: 15, width: 200, borderRadius: 20, }}
+      />
+      <TextInput
+        placeholder="Email"
+        value={email}
+        onChangeText={text => setEmail(text)}
+        style={{ borderWidth: 2, borderColor: 'gray', margin: 10, padding: 15, width: 200,borderRadius: 20, }}
+      />
+      <TextInput
+        placeholder="Password"
+        secureTextEntry={true}
+        value={password}
+        onChangeText={text => setPassword(text)}
+        style={{ borderWidth: 2, borderColor: 'gray', margin: 10, padding: 15, width: 200,borderRadius: 20, }}
+      />
+      <TextInput
+        placeholder="Gender"
+        value={gender}
+        onChangeText={text => setGender(text)}
+        style={{ borderWidth: 2, borderColor: 'gray', margin: 10, padding: 15, width: 200,borderRadius: 20, }}
+      />
+      <Button title="Choose Image" onPress={selectImage} />
+      {image && <Image source={{ uri: image }} style={{ width: 100, height: 100, margin: 10 }} />}
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '80%', marginTop: 20 }}>
+        <Button title="Confirm Changes" onPress={handleSaveChanges} />
+       
+      </View>
+    </View>
+  );
+};
+
+export default AccountSettingsScreen;

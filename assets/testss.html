@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Song API Test</title>
+</head>
+<body>
+    <h1>Latest Songs</h1>
+    <div id="songs"></div>
+
+    <script>
+        // Function to fetch latest songs from the API
+        function fetchLatestSongs() {
+            fetch('http://localhost:8080/api/songs/latest')
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response data
+                displaySongs(data);
+            })
+            .catch(error => console.error('Error fetching latest songs:', error));
+        }
+
+        // Function to display the fetched songs
+        function displaySongs(songs) {
+            const songsContainer = document.getElementById('songs');
+            songsContainer.innerHTML = ''; // Clear previous content
+
+            songs.forEach(song => {
+                const songDiv = document.createElement('div');
+                songDiv.innerHTML = `
+                    <h3>${song.title}</h3>
+                    <p>Description: ${song.description}</p>
+                    <p>Type: ${song.type}</p>
+                    <p>Duration: ${song.duration}</p>
+                    <p>Date: ${song.date}</p>
+                    <hr>
+                `;
+                songsContainer.appendChild(songDiv);
+            });
+        }
+
+        // Fetch latest songs when the page loads
+        window.onload = function() {
+            fetchLatestSongs();
+        };
+    </script>
+</body>
+</html>
