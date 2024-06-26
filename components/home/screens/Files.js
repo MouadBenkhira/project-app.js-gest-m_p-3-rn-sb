@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, Pressable, PanResponder } from 'react-native';
-import { Avatar } from 'react-native-elements';
+import { Avatar, Icon } from 'react-native-elements';
 
 const File = () => {
   const [songs, setSongs] = useState([]);
   const [filteredSongs, setFilteredSongs] = useState([]);
-  const [selectedSong, setSelectedSong] = useState(null); 
+  const [selectedSong, setSelectedSong] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [audio] = useState(new Audio());
   const [progress, setProgress] = useState(0);
@@ -13,7 +13,6 @@ const File = () => {
   const [searchText, setSearchText] = useState('');
 
   useEffect(() => {
-    // Fetch data from API when component mounts
     fetchData();
   }, []);
 
@@ -68,8 +67,8 @@ const File = () => {
     try {
       await fetch(`http://localhost:8080/api/songs/${songId}/play`);
       setIsPlaying(true);
-      audio.src = `http://localhost:8080/api/songs/${songId}/play`; // Set audio source
-      audio.play(); // Play the audio
+      audio.src = `http://localhost:8080/api/songs/${songId}/play`;
+      audio.play();
     } catch (error) {
       console.error('Error playing song:', error);
     }
@@ -91,9 +90,9 @@ const File = () => {
 
   const handlePlayPause = () => {
     if (isPlaying) {
-      audio.pause(); // Pause the audio
+      audio.pause();
     } else {
-      audio.play(); // Resume playing the audio
+      audio.play();
     }
     setIsPlaying(!isPlaying);
   };
@@ -109,8 +108,9 @@ const File = () => {
     <View style={styles.container}>
       <View style={styles.searchBar}>
         <TextInput
-          style={[styles.input, { color: '#fff' }]}
+          style={styles.input}
           placeholder="Search..."
+          placeholderTextColor="#888"
           value={searchText}
           onChangeText={text => setSearchText(text)}
         />
@@ -122,13 +122,10 @@ const File = () => {
           <Pressable onPress={() => handleItemClick(item, index)}>
             <View style={styles.item}>
               <View style={styles.avatarContainer}>
-              <Avatar
-    rounded
-    source={{
-        uri: `http://localhost:8080/api/songs/${item.id}/image`,
-    }}
-/>
-
+                <Avatar
+                  rounded
+                  source={{ uri: `http://localhost:8080/api/songs/${item.id}/image` }}
+                />
               </View>
               <View style={styles.textContainer}>
                 <Text style={styles.songName}>{item.title}</Text>
@@ -139,8 +136,9 @@ const File = () => {
         )}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
-      {isPlaying && (
+      {selectedSong && (
         <FloatingPlayer
+          isPlaying={isPlaying}
           onPress={handlePlayPause}
           progress={progress}
           onSeek={handleSeek}
@@ -152,7 +150,7 @@ const File = () => {
   );
 };
 
-const FloatingPlayer = ({ onPress, progress, onSeek, onNext, onPrevious }) => {
+const FloatingPlayer = ({ isPlaying, onPress, progress, onSeek, onNext, onPrevious }) => {
   const panResponder = React.useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
@@ -170,15 +168,17 @@ const FloatingPlayer = ({ onPress, progress, onSeek, onNext, onPrevious }) => {
 
   return (
     <View style={styles.floatingPlayer}>
-      <Pressable style={styles.playPauseButton} onPress={onPrevious}>
-        <Text style={styles.playPauseButtonText}>Previous</Text>
-      </Pressable>
-      <Pressable style={styles.playPauseButton} onPress={onPress}>
-        <Text style={styles.playPauseButtonText}>Play/Pause</Text>
-      </Pressable>
-      <Pressable style={styles.playPauseButton} onPress={onNext}>
-        <Text style={styles.playPauseButtonText}>Next</Text>
-      </Pressable>
+      <View style={styles.controlsContainer}>
+        <Pressable style={styles.playPauseButton} onPress={onPrevious}>
+          <Icon name="skip-previous" type="material" color="#fff" />
+        </Pressable>
+        <Pressable style={styles.playPauseButton} onPress={onPress}>
+          <Icon name={isPlaying ? "pause" : "play-arrow"} type="material" color="#fff" />
+        </Pressable>
+        <Pressable style={styles.playPauseButton} onPress={onNext}>
+          <Icon name="skip-next" type="material" color="#fff" />
+        </Pressable>
+      </View>
       <View style={styles.progressBarContainer}>
         <View
           style={[styles.progressBar, { width: `${progress}%` }]}
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 20,
-    backgroundColor: '#131212', // Set background color to black
+    backgroundColor: '#131212',
   },
   searchBar: {
     paddingHorizontal: 10,
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     paddingVertical: 8,
     paddingHorizontal: 12,
-    color: 'white', // Set text color to white
+    color: '#fff',
   },
   item: {
     flexDirection: 'row',
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
-    overflow: 'hidden', // Clip the image to the border radius
+    overflow: 'hidden',
     marginRight: 10,
   },
   textContainer: {
@@ -225,11 +225,10 @@ const styles = StyleSheet.create({
   songName: {
     fontWeight: 'bold',
     fontSize: 16,
-    color: '#fff', // Set text color to white
+    color: '#fff',
   },
   description: {
-    color: '#666',
-    color: '#fff', // Set text color to white
+    color: '#fff',
   },
   separator: {
     height: 1,
@@ -242,23 +241,20 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     backgroundColor: '#333',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
     padding: 10,
+  },
+  controlsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   playPauseButton: {
     padding: 10,
   },
-  playPauseButtonText: {
-    color: '#fff',
-  },
   progressBarContainer: {
-    flex: 1,
     height: 5,
     backgroundColor: '#555',
-    marginLeft: 10,
-    marginRight: 10,
+    marginTop: 10,
   },
   progressBar: {
     height: '100%',

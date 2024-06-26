@@ -39,9 +39,7 @@ const SettingsScreen = () => {
           <Text style={styles.optionText}>Profile</Text>
         </TouchableOpacity>
         <View style={styles.divider} />
-        <TouchableOpacity style={styles.option} onPress={navigateToAccount}>
-          <Text style={styles.optionText}>Account</Text>
-        </TouchableOpacity>
+  
         <View style={styles.divider} />
         <TouchableOpacity style={styles.option} onPress={navigateToAdd}>
           <Text style={styles.optionText}>Add Song</Text>
@@ -50,14 +48,9 @@ const SettingsScreen = () => {
         <TouchableOpacity style={styles.option} onPress={navigateToHelp}>
           <Text style={styles.optionText}>Help Center</Text>
         </TouchableOpacity>
-        <View style={styles.divider} />
-        <TouchableOpacity style={styles.option} onPress={navigateToContact}>
-          <Text style={styles.optionText}>Contact Us</Text>
-        </TouchableOpacity>
+        
       </View>
-      <TouchableOpacity style={styles.disconnectButton}>
-        <Text style={styles.disconnectText}>Disconnect</Text>
-      </TouchableOpacity>
+
       <View style={styles.footer}>
         <Text style={styles.footerText}>© 2024 YourApp. All rights reserved.</Text>
       </View>

@@ -1,15 +1,19 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 
-const FileAdd = () => {
-  
+const FileAdd = ({ navigation }) => {
+  const goBack = () => {
+    navigation.goBack(); // Assuming you're using React Navigation
+  };
 
   return (
     <View style={styles.container}>
+      <View style={styles.backButtonContainer}>
+        <Button onPress={goBack} title="Back" />
+      </View>
       <Text style={styles.heading}>
         Sorry, we are not supporting this type of action right now. Please go to our page to upload it!
       </Text>
-     
     </View>
   );
 };
@@ -22,18 +26,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
   },
+  backButtonContainer: {
+    position: 'absolute',
+    top: 20,
+    left: 20,
+    zIndex: 1,
+  },
   heading: {
     fontFamily: 'Roboto',
     fontSize: 24,
     color: 'white',
     textAlign: 'center',
     marginBottom: 20,
-  },
-  webview: {
-    flex: 1,
-    width: '100%',
-    marginTop: 20,
-    backgroundColor: '#fff', // Set a background color for the WebView container
   },
 });
 
